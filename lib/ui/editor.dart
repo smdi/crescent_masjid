@@ -1,10 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:crescent_masjid/util/util.dart';
+
+
+
+
 
 
 class Editor extends StatefulWidget {
-
-
 
   Editor({Key key }) : super(key : key);
 
@@ -15,9 +18,8 @@ class Editor extends StatefulWidget {
 class _EditorState extends State<Editor> {
 
 
-  var _hour = new TextEditingController();
-  var _minut  = new TextEditingController();
   String dropdownValue = 'sehari';
+  String hoursVal = '12',minutesVal = '00';
 
   @override
   Widget build(BuildContext context) {
@@ -45,31 +47,46 @@ class _EditorState extends State<Editor> {
                 .toList(),
           ),
 
-          new ListTile(
-            title: new TextField(
-              controller: _hour,
-              decoration: new InputDecoration(
-                labelText: "Hour ",
-                hintText: '12'
-              ),
-            ),
+          DropdownButton<String>(
+            value: hoursVal,
+            onChanged: (String newValue) {
+              setState(() {
+                hoursVal = newValue;
+              });
+            },
+            items:hoursList
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            })
+                .toList(),
+          ),
+//
+          DropdownButton<String>(
+            value: minutesVal,
+            onChanged: (String newValue) {
+              setState(() {
+                minutesVal = newValue;
+              });
+            },
+            items: minutesList
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            })
+                .toList(),
           ),
 
-          new ListTile(
-            title: new TextField(
-              controller: _minut,
-              decoration: new InputDecoration(
-                labelText: "Minutes ",
-                hintText: '00'
-              ),
-            ),
-          ),
           new ListTile(
             title: new FlatButton(
                 onPressed: (){
                   Navigator.pop(context ,{
-                    'hour' : _hour.text.toString(),
-                    'minute' : _minut.text.toString(),
+                    'hour' : hoursVal,
+                    'minute' : minutesVal,
                     'timing':dropdownValue
                   });
                 },
@@ -79,6 +96,7 @@ class _EditorState extends State<Editor> {
       ),
     );
   }
+
 }
 
 

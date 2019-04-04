@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
 
         appBar: new AppBar(
         backgroundColor: Colors.lightBlue,
-        title: new Text("Salah Timings" ),
+        title: new Text(title),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.share),
@@ -106,6 +106,7 @@ class _HomeState extends State<Home> {
         print(timing);
 
         setValues(timing ,hour );
+        updateUsers(hour, timing);
 
     }
 
@@ -137,300 +138,48 @@ class _HomeState extends State<Home> {
 
     if(connection) {
 
+      setState(() {
+        progress = 70.0;
+        percent = 0.7;
+        opac = true;
+      });
+
       return new FutureBuilder(
           future: getTimings(),
           builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
             if (snapshot.hasData) {
               Map content = snapshot.data;
 
-
               return new Column(
                 children: <Widget>[
 
-//                  getProgressCircle(1.0, 100, false),
+                  getHeading("Salah Timings"),
 
-                  new Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.white70,
-                        child: new Text('S', style: new TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold),),
-                      ),
-                      title: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
+                  getCardSalah("Fajr",content['updated'],content['fajr'], content['fajr_iqamah']),
 
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Sehar ", style: new TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold),),
-                              Opacity(opacity: 0.0,
-                                  child: Text(" masjid updated on : " +
-                                      content['updated'])),
-                            ],
-                          ),
+                  getCardSalah("Zohar",content['updated'],content['zohar'], content['zohar_iqamah']),
 
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Start : " + content['sehari']),
-                              Text("End : " + content['sehari']),
-                            ],
-                          ),
-                        ],
-                      ),
-                      subtitle: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(content['place']),
-                          Text("updated on : " + content['updated']),
-                        ],
-                      ),
-                    ),
-                  ),
+                  getCardSalah("Jumah\nZohar",content['updated'],content['jumah'], content['jumah_iqamah']),
 
-                  new Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.white70,
-                        child: new Text('F', style: new TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold),),
-                      ),
-                      title: Column(
-                        children: <Widget>[
+                  getCardSalah("Asar",content['updated'],content['asar'], content['asar_iqamah']),
 
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Fajr ", style: new TextStyle(fontSize: 20.0,
-                                  fontWeight: FontWeight.bold),),
-                              Opacity(opacity: 0.0,
-                                  child: Text(" masjid updated on : " +
-                                      content['updated'])),
-                            ],
-                          ),
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Azaan : " + content['fajr']),
-                              Text("Iqamath : " + content['fajr']),
-                            ],
-                          ),
-                        ],
-                      ),
-                      subtitle: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(content['place']),
-                          Text("updated on : " + content['updated']),
-                        ],
-                      ),
-                    ),
-                  ),
+                  getCardSalah("Magrib",content['updated'],content['magrib'], content['magrib_iqamah']),
 
-                  new Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.white70,
-                        child: new Text('Z', style: new TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold),),
-                      ),
-                      title: Column(
-                        children: <Widget>[
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Zohar ", style: new TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold),),
-                              Opacity(opacity: 0.0,
-                                  child: Text(" masjid updated on : " +
-                                      content['updated'])),
-                            ],
-                          ),
+                  getCardSalah("Isha",content['updated'],content['isha'], content['isha_iqamah']),
 
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Azaan : " + content['zohar']),
-                              Text("Iqamath : " + content['zohar']),
-                            ],
-                          ),
-                        ],
-                      ),
-                      subtitle: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(content['place']),
-                          Text("updated on : " + content['updated']),
-                        ],
-                      ),
-                    ),
-                  ),
+                  getHeading("Sehar , Iftiyar & Taraweeh"),
 
-                  new Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.white70,
-                        child: new Text('A', style: new TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold),),
-                      ),
-                      title: Column(
-                        children: <Widget>[
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Asar ", style: new TextStyle(fontSize: 20.0,
-                                  fontWeight: FontWeight.bold),),
-                              Opacity(opacity: 0.0,
-                                  child: Text(" masjid updated on : " +
-                                      content['updated'])),
-                            ],
-                          ),
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Azaan : " + content['asar']),
-                              Text("Iqamath : " + content['asar']),
-                            ],
-                          ),
-                        ],
-                      ),
-                      subtitle: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(content['place']),
-                          Text("updated on : " + content['updated']),
-                        ],
-                      ),
-                    ),
-                  ),
+                  getCardSun("Sehar",content['updated'],content['sehari']),
 
-                  new Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.white70,
-                        child: new Text('I', style: new TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold),),
-                      ),
-                      title: Column(
-                        children: <Widget>[
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Iftiyaar ", style: new TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold),),
-                              Opacity(opacity: 0.0,
-                                  child: Text(" masjid updated on : " +
-                                      content['updated'])),
-                            ],
-                          ),
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Start : " + content['iftiyaari']),
-                              Text("End : " + content['iftiyaari']),
-                            ],
-                          ),
-                        ],
-                      ),
-                      subtitle: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(content['place']),
-                          Text("updated on : " + content['updated']),
+                  getCardSun("Iftiyar",content['updated'],content['iftiyaari']),
 
-                        ],
-                      ),
-                    ),
-                  ),
+                  getCardSun("Taraweeh",content['updated'],content['taraweeh']),
 
-                  new Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.white70,
-                        child: new Text('M', style: new TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold),),
-                      ),
-                      title: Column(
-                        children: <Widget>[
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Magrib ", style: new TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold),),
-                              Opacity(opacity: 0.0,
-                                  child: Text(" masjid updated on : " +
-                                      content['updated'])),
-                            ],
-                          ),
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Azaan : " + content['magrib']),
-                              Text("Iqamath : " + content['magrib']),
-                            ],
-                          ),
-                        ],
-                      ),
-                      subtitle: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(content['place']),
-                          Text("updated on : " + content['updated']),
-                        ],
-                      ),
-                    ),
-                  ),
+                  getHeading("Sunrise & Sunset"),
 
-                  new Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.white70,
-                        child: new Text('I', style: new TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold),),
-                      ),
-                      title: Column(
-                        children: <Widget>[
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Isha ", style: new TextStyle(fontSize: 20.0,
-                                  fontWeight: FontWeight.bold),),
-                              Opacity(opacity: 0.0,
-                                  child: Text(" masjid updated on : " +
-                                      content['updated'])),
-                            ],
-                          ),
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text("Azaan : " + content['isha']),
-                              Text("Iqamath : " + content['isha']),
-                            ],
-                          ),
-                        ],
-                      ),
-                      subtitle: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(content['place']),
-                          Text("updated on : " + content['updated']),
-                        ],
-                      ),
-                    ),
-                  ),
+                  getCardSun("Sunrise",content['updated'],content['sunrise']),
+
+                  getCardSun("Sunset",content['updated'],content['sunset']),
 
                 ],
               );
@@ -438,7 +187,7 @@ class _HomeState extends State<Home> {
               return new Container();
             }
           });
-     return new Text("connected");
+
     }
     return new Text("no connection");
   }
@@ -506,6 +255,14 @@ class _HomeState extends State<Home> {
     // snackbar for success registration
   }
 
+  void updateUsers(String time ,String timing) async{
+    String apiUrl = "https://crescent-masjid-timings.herokuapp.com/notify?head=$timing timings has updated&contain=$timing - $time";
+    http.Response response = await http.get(apiUrl);
+    print("getting response");
+    print(response.body);
+    // snackbar for success registration
+  }
+
   Future<void> _checkConnectivity() async {
 
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -544,6 +301,184 @@ class _HomeState extends State<Home> {
 //    return new Text("no connection");
     }
 
+  }
+
+  Widget getCardSalah(String lead,String updated , String azaan ,String iqamah ) {
+
+    return  SizedBox(
+      height: 120.0,
+      child:  new Card(
+//          margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+        child: ListTile(
+          leading: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+            child: CircleAvatar(
+              maxRadius: 40.0,
+              backgroundColor: Colors.white70,
+              child: new Text(lead, style: new TextStyle(
+                  color: Colors.blueAccent,
+                  fontWeight: FontWeight.bold),),
+            ),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            child: new Row(
+
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+
+                Row(
+                  children: <Widget>[
+                    Text("Azaan  : "),
+                    Text( azaan ,style: new TextStyle(color: Colors.blueAccent), ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(5.0 ,0,0,0),
+                  child: Row(
+                    children: <Widget>[
+                      Text("Iqamah : "),
+                      Text(iqamah ,style: new TextStyle(color: Colors.blueAccent),),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text("Last updated on : " + updated),
+              ],
+            ),
+          ),
+        ),
+      ),
+
+    );
+
+  }
+
+  Widget getCard(String lead,String updated , String azaan ,String iqamah ) {
+
+    return  SizedBox(
+      height: 120.0,
+      child:  new Card(
+//          margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+        child: ListTile(
+          leading: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+            child: CircleAvatar(
+              maxRadius: 40.0,
+              backgroundColor: Colors.white70,
+              child: new Text(lead, style: new TextStyle(
+                  color: Colors.blueAccent,
+                  fontWeight: FontWeight.bold),),
+            ),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            child: new Row(
+
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+
+                Row(
+                  children: <Widget>[
+                    Text("Start  : "),
+                    Text( azaan ,style: new TextStyle(color: Colors.blueAccent), ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(5.0 ,0,0,0),
+                  child: Row(
+                    children: <Widget>[
+                      Text("   End : "),
+                      Text(iqamah ,style: new TextStyle(color: Colors.blueAccent),),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          subtitle: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+
+                Text("Last updated on : " + updated),
+              ],
+            ),
+          ),
+        ),
+      ),
+
+    );
+
+  }
+
+  Widget getCardSun(String lead,String updated , String time ) {
+
+    return  SizedBox(
+      height: 120.0,
+      child:  new Card(
+//          margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+        child: ListTile(
+          leading: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+            child: CircleAvatar(
+              maxRadius: 40.0,
+              backgroundColor: Colors.white70,
+              child: new Text(lead, style: new TextStyle(
+                  color: Colors.blueAccent,
+                  fontWeight: FontWeight.bold),),
+            ),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            child: new Row(
+
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+
+                Row(
+                  children: <Widget>[
+                    Text("$lead  : "),
+                    Text( time ,style: new TextStyle(color: Colors.blueAccent), ),
+                  ],
+                ),
+
+              ],
+            ),
+          ),
+
+          subtitle: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+
+                Text("Last updated on : " + updated),
+              ],
+            ),
+          ),
+        ),
+      ),
+
+    );
+
+  }
+
+  Widget getHeading(String s) {
+
+    return Center(child: Padding(
+      padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
+      child: new Text("$s",style: new TextStyle(color: Colors.blueAccent),),
+    ));
   }
 
 }
