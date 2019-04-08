@@ -99,14 +99,13 @@ class _HomeState extends State<Home> {
         print(result['hour']);
         print(result['minute']);
         print(result['timing']);
+        print(result['hoursEndVal']);
+        print(result['minuteEndVal']);
 
         String timing = result['timing'];
-        String hour  = result['hour']+':'+result['minute'];
-        print(hour);
-        print(timing);
 
-        setValues(timing ,hour );
-        updateUsers(hour, timing);
+        updateTimings(timing ,result);
+
 
     }
 
@@ -159,7 +158,7 @@ class _HomeState extends State<Home> {
 
                   getCardSalah("Zohar",content['updated'],content['zohar'], content['zohar_iqamah']),
 
-                  getCardSalah("Jumah\nZohar",content['updated'],content['jumah'], content['jumah_iqamah']),
+                  getCardSalah("Jum'ah",content['updated'],content['jumah'], content['jumah_iqamah']),
 
                   getCardSalah("Asar",content['updated'],content['asar'], content['asar_iqamah']),
 
@@ -192,9 +191,20 @@ class _HomeState extends State<Home> {
     return new Text("no connection");
   }
 
-  void setValues(String timing, String hour) {
+  void setOneValues(String timing, String hour) {
 
+      String date = getDate();
       dbReference.update({'$timing':'$hour'});
+      dbReference.update({'updated':'$date'});
+
+  }
+
+  void setTwoValues(String timing, String hour, String hourLast) {
+
+    String date = getDate();
+    dbReference.update({'$timing':'$hour'});
+    dbReference.update({'$timing'+'_iqamah':'$hourLast'});
+    dbReference.update({'updated':'$date'});
 
   }
 
@@ -255,8 +265,8 @@ class _HomeState extends State<Home> {
     // snackbar for success registration
   }
 
-  void updateUsers(String time ,String timing) async{
-    String apiUrl = "https://crescent-masjid-timings.herokuapp.com/notify?head=$timing timings has updated&contain=$timing - $time";
+  void updateUsers(String  url) async{
+    String apiUrl = url;
     http.Response response = await http.get(apiUrl);
     print("getting response");
     print(response.body);
@@ -306,6 +316,7 @@ class _HomeState extends State<Home> {
   Widget getCardSalah(String lead,String updated , String azaan ,String iqamah ) {
 
     return  SizedBox(
+
       height: 120.0,
       child:  new Card(
 //          margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0),
@@ -479,6 +490,52 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
       child: new Text("$s",style: new TextStyle(color: Colors.blueAccent),),
     ));
+  }
+
+  void updateTimings(String value, Map result) {
+
+    int flag = 0;
+    for(var i = 0;i<oneList.length;i++){
+      if(value == oneList[i]){
+        print("one time");
+        flag = 1;
+      }
+    }
+    if(flag == 1){
+      String timing = result['timing'];
+      String hour  = result['hour']+':'+result['minute'];
+
+      print(hour);
+      print(timing);
+
+      setOneValues(timing ,hour );
+      updateUsers("https://crescent-masjid-timings.herokuapp.com/notify?head=$timing timings has updated&contain=$timing - $hour");
+    }
+    else {
+      String timing = result['timing'];
+      String hour  = result['hour']+':'+result['minute'];
+      String hourLast  = result['hoursEndVal']+':'+result['minuteEndVal'];
+
+      print(hour);
+      print(timing);
+      print(hourLast);
+      
+      setTwoValues(timing ,hour , hourLast );
+      updateUsers("https://crescent-masjid-timings.herokuapp.com/notify?head=$timing timings has updated&contain=$timing - $hour -- $hourLast");
+    }
+  }
+
+  String getDate() {
+    var now = new DateTime.now();
+    print(now);
+    if(now.day < 10){
+      if(now.month < 10){
+        return "0${now.day}-0${now.month}-${now.year}";
+      }
+      else{
+        return "0${now.day}-${now.month}-${now.year}";
+      }
+    }
   }
 
 }
