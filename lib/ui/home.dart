@@ -11,6 +11,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:connectivity/connectivity.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'search.dart';
 
 
 var _connection = false , opac;
@@ -51,18 +52,18 @@ class _HomeState extends State<Home> {
         title: new Text(title),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.share),
-            tooltip: 'share',
-            onPressed: ()=> debugPrint('share'),
+            icon: Icon(Icons.search),
+            tooltip: 'search',
+            onPressed: (){_gotoSearch(context);},
           ),
           IconButton(
             icon: Icon(Icons.edit),
             tooltip: 'edit',
-            onPressed:(){_gotoNextScreen(context);},
+            onPressed:(){_gotoEditor(context);},
           ),
 
         ],
-//        centerTitle: true,
+//
 
       leading:IconButton(
         icon: Icon(Icons.menu),
@@ -86,7 +87,24 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future _gotoNextScreen(BuildContext context) async {
+  Future _gotoSearch(BuildContext context) async {
+
+    Map result  = await Navigator.of(context).push(
+        new MaterialPageRoute<Map>(
+            builder: (BuildContext context){
+              return new Search();
+            })
+    );
+    if (result!= null && result.containsKey('city')){
+
+      print(result['city']);
+      print(result['country']);
+
+    }
+    
+  }
+  
+  Future _gotoEditor(BuildContext context) async {
     Map result  = await Navigator.of(context).push(
         new MaterialPageRoute<Map>(
             builder: (BuildContext context){
@@ -105,7 +123,6 @@ class _HomeState extends State<Home> {
         String timing = result['timing'];
 
         updateTimings(timing ,result);
-
 
     }
 
