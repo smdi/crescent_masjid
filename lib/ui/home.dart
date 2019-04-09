@@ -14,8 +14,6 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'search.dart';
 
 
-var _connection = false , opac;
-double percent , progress ;
 
 class Home extends StatefulWidget {
   @override
@@ -24,6 +22,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+
+  var _connection = false , opac;
+  double percent , progress ;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -34,11 +35,7 @@ class _HomeState extends State<Home> {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
 
-    setState(() {
-      progress = 40.0;
-      percent = 0.4;
-      opac = true;
-    });
+   stateSetter(20.0, 0.2, true);
 
   }
 
@@ -63,13 +60,7 @@ class _HomeState extends State<Home> {
           ),
 
         ],
-//
 
-      leading:IconButton(
-        icon: Icon(Icons.menu),
-        tooltip: 'menu',
-        onPressed:()=>debugPrint('menu'),
-      ),
       ),
 
       body: RefreshIndicator(
@@ -89,19 +80,12 @@ class _HomeState extends State<Home> {
 
   Future _gotoSearch(BuildContext context) async {
 
-    Map result  = await Navigator.of(context).push(
+     Navigator.of(context).push(
         new MaterialPageRoute<Map>(
             builder: (BuildContext context){
               return new Search();
             })
     );
-    if (result!= null && result.containsKey('city')){
-
-      print(result['city']);
-      print(result['country']);
-
-    }
-    
   }
   
   Future _gotoEditor(BuildContext context) async {
@@ -141,11 +125,9 @@ class _HomeState extends State<Home> {
 
     });
 
-    setState(() {
-      progress = 100.0;
-      percent = 1.0;
-      opac= false;
-    });
+    stateSetter(50.0, 0.5, true);
+    stateSetter(70.0, 0.7, true);
+    stateSetter(80.0, 0.8, false);
 
       return data;
   }
@@ -154,11 +136,7 @@ class _HomeState extends State<Home> {
 
     if(connection) {
 
-      setState(() {
-        progress = 70.0;
-        percent = 0.7;
-        opac = true;
-      });
+      stateSetter(100.0, 1.0, false);
 
       return new FutureBuilder(
           future: getTimings(),
@@ -308,11 +286,7 @@ class _HomeState extends State<Home> {
       });
 //    return updateWidget();
 
-      setState(() {
-        progress = 40.0;
-        percent = 0.4;
-        opac = true;
-      });
+      stateSetter(40.0, 0.4, true);
 
     } else {
       // not  connected . show a image of network not connected .
@@ -320,11 +294,7 @@ class _HomeState extends State<Home> {
           setState(() {
             _connection = false;
           });
-      setState(() {
-        progress = 40.0;
-        percent = 0.4;
-        opac = false;
-      });
+      stateSetter(40.0, 0.4, false);
 //    return new Text("no connection");
     }
 
@@ -553,6 +523,16 @@ class _HomeState extends State<Home> {
         return "0${now.day}-${now.month}-${now.year}";
       }
     }
+  }
+
+  void stateSetter(double progress, double percent, opac) {
+
+    setState(() {
+      this.progress = progress;
+      this.percent = percent;
+      this.opac = opac;
+    });
+
   }
 
 }

@@ -1,8 +1,10 @@
 
 
 
+import 'package:crescent_masjid/ui/salah_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:crescent_masjid/util/util.dart';
+
 
 
 
@@ -28,18 +30,21 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("Edit Timings"),
+        title: new Text("Enter Location"),
       ),
       body: new ListView(
         children : <Widget>[
 
           new TextField(
+
             controller: _countryController,
             keyboardType: TextInputType.text,
             decoration: new InputDecoration(
                 labelText: 'Country',
                 hintText: 'India',
-                icon: new Icon(Icons.person_outline)),
+                icon: new Icon(Icons.location_city)),
+
+
           ),
 
           new TextField(
@@ -48,24 +53,30 @@ class _SearchState extends State<Search> {
             decoration: new InputDecoration(
                 labelText: 'City',
                 hintText: 'Hyderabad',
-                icon: new Icon(Icons.person_outline)),
+                icon: new Icon(Icons.location_city)),
           ),
 
           new ListTile(
             title: new FlatButton(
                 onPressed: (){
-                  Navigator.pop(context ,{
-                    'city' : _cityController.text.isEmpty ? "Hyderabad" : _cityController.text,
-                    'country': _countryController.text.isEmpty ? "India" : _countryController.text,
-                  });
+
+                  Navigator.of(context).push(
+                      new MaterialPageRoute<Map>(
+                          builder: (BuildContext context){
+                            return new Salah(city :_cityController.text.isEmpty ? "Hyderabad" :_cityController.text
+                                ,country: _countryController.text.isEmpty ? "India" :_countryController.text);
+                          })
+                  );
                 },
-                child: new Text("send data back !")),
+                child: new Text("send data !")),
           ),
 
         ],
       ),
     );
   }
+
+
 
 
 
