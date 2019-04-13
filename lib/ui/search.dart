@@ -32,52 +32,66 @@ class _SearchState extends State<Search> {
       appBar: new AppBar(
         title: new Text("Enter Location"),
       ),
-      body: new ListView(
+      body: new Stack(
         children : <Widget>[
 
-          new TextField(
+        new Image.asset(
+            'images/city.jpg',
+            width: 1200.0,
+            height: 1200.0,
+            fit: BoxFit.cover,
+        ),
 
-            controller: _countryController,
-            keyboardType: TextInputType.text,
-            decoration: new InputDecoration(
-                labelText: 'Country',
-                hintText: 'India',
-                icon: new Icon(Icons.location_city)),
+        Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new TextField(
 
+                  controller: _countryController,
+                  keyboardType: TextInputType.text,
+                  decoration: new InputDecoration(
+                      labelText: 'Country',
+                      hintText: 'India',
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new TextField(
+                  controller: _cityController,
+                  keyboardType: TextInputType.text,
+                  decoration: new InputDecoration(
+                      labelText: 'City',
+                      hintText: 'Hyderabad',
+                  ),
+                ),
+              ),
+              new ListTile(
 
-          ),
+                title: new FlatButton(
+                  color: Colors.blueAccent.shade100,
+                  splashColor: Colors.blueAccent,
+                    onPressed: (){
 
-          new TextField(
-            controller: _cityController,
-            keyboardType: TextInputType.text,
-            decoration: new InputDecoration(
-                labelText: 'City',
-                hintText: 'Hyderabad',
-                icon: new Icon(Icons.location_city)),
-          ),
+                      Navigator.of(context).push(
+                          new MaterialPageRoute<Map>(
+                              builder: (BuildContext context){
+                                return new Salah(city :_cityController.text.isEmpty ? "Hyderabad" :_cityController.text
+                                    ,country: _countryController.text.isEmpty ? "India" :_countryController.text);
+                              })
+                      );
+                    },
+                    child: new Text("Search" ,style: new TextStyle(color: Colors.white,fontSize: 15.0),) ),
+              ),
+            ],
+        ),
 
-          new ListTile(
-            title: new FlatButton(
-                onPressed: (){
-
-                  Navigator.of(context).push(
-                      new MaterialPageRoute<Map>(
-                          builder: (BuildContext context){
-                            return new Salah(city :_cityController.text.isEmpty ? "Hyderabad" :_cityController.text
-                                ,country: _countryController.text.isEmpty ? "India" :_countryController.text);
-                          })
-                  );
-                },
-                child: new Text("send data !")),
-          ),
 
         ],
       ),
     );
   }
-
-
-
 
 
 }

@@ -28,65 +28,83 @@ class _EditorState extends State<Editor> {
       body: new ListView(
         children : <Widget>[
 
-          DropdownButton<String>(
-            value: dropdownValue,
-            onChanged: (String newValue) {
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
 
-              visibleButtons(newValue);
+              new Text("Timinng  " ,style: new TextStyle(color: Colors.blueAccent),),
 
-              setState(() {
-                dropdownValue = newValue;
-              });
-            },
-            items: timingList
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            })
-                .toList(),
+              DropdownButton<String>(
+                value: dropdownValue,
+                onChanged: (String newValue) {
+
+                  visibleButtons(newValue);
+
+                  setState(() {
+                    dropdownValue = newValue;
+                  });
+                },
+                items: timingList
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                })
+                    .toList(),
+              ),
+            ],
           ),
 
-          DropdownButton<String>(
-            value: hoursVal,
-            onChanged: (String newValue) {
-              setState(() {
-                hoursVal = newValue;
-              });
-            },
-            items:hoursList
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            })
-                .toList(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              DropdownButton<String>(
+                value: hoursVal,
+                onChanged: (String newValue) {
+                  setState(() {
+                    hoursVal = newValue;
+                  });
+                },
+                items:hoursList
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                })
+                    .toList(),
+              ),
+              DropdownButton<String>(
+                value: minutesVal,
+                onChanged: (String newValue) {
+                  setState(() {
+                    minutesVal = newValue;
+                  });
+                },
+                items: minutesList
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                })
+                    .toList(),
+              ),
+
+            ],
           ),
 //
-          DropdownButton<String>(
-            value: minutesVal,
-            onChanged: (String newValue) {
-              setState(() {
-                minutesVal = newValue;
-              });
-            },
-            items: minutesList
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            })
-                .toList(),
-          ),
 
           getOptionalWidget(opac),
 
           new ListTile(
+
             title: new FlatButton(
+                color: Colors.blueAccent.shade100,
+                splashColor: Colors.blueAccent,
                 onPressed: (){
+
                   Navigator.pop(context ,{
                     'hour' : hoursVal,
                     'hoursEndVal':hoursEndVal,
@@ -95,7 +113,7 @@ class _EditorState extends State<Editor> {
                     'timing':dropdownValue
                   });
                 },
-                child: new Text("send data back !")),
+                child: new Text("save data" , style: new TextStyle(color: Colors.white,fontSize: 15.0),)),
           ),
         ],
       ),
@@ -104,8 +122,8 @@ class _EditorState extends State<Editor> {
 
   Widget getOptionalWidget(bool opac) {
 
-    return new Column(
-
+    return new Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
 
         Visibility(

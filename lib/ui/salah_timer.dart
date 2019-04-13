@@ -132,11 +132,9 @@ class _SalahState extends State<Salah> {
             }
           });
     }
-    else{
-
-      return new Text("No connection");
+    else if (connectivity == false) {
+      return getNoConnectionWidget();
     }
-
   }
 
   Widget getCard(String lead,String updated , String time ,String timezone ) {

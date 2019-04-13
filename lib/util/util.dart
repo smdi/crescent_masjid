@@ -59,3 +59,42 @@ List<String> minutesList =  <String>['00','01','02','03','04','05','06','07','08
                                  '51','52','53','54','55','56','57','58','59'];
 
 List<String> oneList = <String>['sehari','sunrise','sunset','iftiyaari','taraweeh'];
+
+
+
+Widget getNoConnectionWidget(){
+
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(0,50.0,0,0),
+    child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+
+        children:<Widget>[
+
+          new Image.asset(
+            'images/no-wifi.png',
+            width: 100.0,
+            height: 100.0,
+            fit: BoxFit.fill,
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,10.0,0,0),
+            child: new Text("No Internet Connection", style: new TextStyle(color: Colors.blueAccent ,fontWeight: FontWeight.bold,height: 2.0 ,fontSize: 15.0),),
+          ),
+
+        ]
+    ),
+  );
+
+}
+
+
+
+
+
+
+
+
+
+

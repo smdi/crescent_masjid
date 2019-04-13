@@ -117,6 +117,10 @@ class _HomeState extends State<Home> {
 
     Map<dynamic , dynamic> data;
 
+
+    stateSetter(60.0, 0.6, true);
+    stateSetter(70.0, 0.7, true);
+
     dbReference =  database.reference().child("timings");
 
     await dbReference.once().then((DataSnapshot snapshot){
@@ -125,8 +129,7 @@ class _HomeState extends State<Home> {
 
     });
 
-    stateSetter(50.0, 0.5, true);
-    stateSetter(70.0, 0.7, true);
+
     stateSetter(80.0, 0.8, false);
 
       return data;
@@ -183,12 +186,16 @@ class _HomeState extends State<Home> {
           });
 
     }
-    return new Text("no connection");
+    else if (connection == false) {
+      return getNoConnectionWidget();
+    }
   }
 
   void setOneValues(String timing, String hour) {
 
       String date = getDate();
+      print("Date");
+      print(date);
       dbReference.update({'$timing':'$hour'});
       dbReference.update({'updated':'$date'});
 
@@ -286,7 +293,7 @@ class _HomeState extends State<Home> {
       });
 //    return updateWidget();
 
-      stateSetter(40.0, 0.4, true);
+      stateSetter(50.0, 0.5, true);
 
     } else {
       // not  connected . show a image of network not connected .
@@ -515,14 +522,19 @@ class _HomeState extends State<Home> {
   String getDate() {
     var now = new DateTime.now();
     print(now);
-    if(now.day < 10){
-      if(now.month < 10){
-        return "0${now.day}-0${now.month}-${now.year}";
-      }
-      else{
-        return "0${now.day}-${now.month}-${now.year}";
-      }
+    if(now.day < 10 && now.month < 10){
+      return "0${now.day}-0${now.month}-${now.year}";
     }
+    else if(now.day <10 && now.month >=10 ){
+      return "0${now.day}-${now.month}-${now.year}";
+    }
+    else if(now.day >=10 && now.month <10){
+      return "${now.day}-0${now.month}-${now.year}";
+    }
+    else{
+       return "${now.day}-${now.month}-${now.year}";
+    }
+
   }
 
   void stateSetter(double progress, double percent, opac) {
