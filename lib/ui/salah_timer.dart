@@ -7,9 +7,10 @@ import 'package:connectivity/connectivity.dart';
 
 
 
-
+final GlobalKey<RefreshIndicatorState> _refreshIndicator = new GlobalKey<RefreshIndicatorState>();
 
 class Salah extends StatefulWidget {
+
 
   String city = "" , country = "";
   Salah( {Key key ,this.city , this.country }) : super(key : key);
@@ -20,9 +21,9 @@ class Salah extends StatefulWidget {
 
 class _SalahState extends State<Salah> {
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicator = new GlobalKey<RefreshIndicatorState>();
 
-  var _connection = false , opac;
+
+  var _connection = true , opac;
   double percent , progress ;
 
   @override
@@ -39,10 +40,13 @@ class _SalahState extends State<Salah> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+
+      backgroundColor: Colors.grey.shade200,
       appBar: new AppBar(
         title: new Text("${widget.country} - ${widget.city}"),
       ),
       body:
+
       RefreshIndicator(
         key: _refreshIndicator,
         onRefresh: _checkConnectivity,
@@ -84,7 +88,9 @@ class _SalahState extends State<Salah> {
           future: getTimings(widget.city, widget.country),
           builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
             if (snapshot.hasData) {
-              Map content = snapshot.data;
+              Map<dynamic , dynamic> content = snapshot.data;
+              print("inside snapshot");
+              print(content);
 
               return new Column(
                 children: <Widget>[
@@ -140,15 +146,7 @@ class _SalahState extends State<Salah> {
   Widget getCard(String lead,String updated , String time ,String timezone ) {
 
 
-//    if(lead == "Sunset"){
-//      stateSetter(60.0 , 0.6 , true);
-//    }
-//    else if(lead == "Isha"){
-//      stateSetter(90.0, 0.9, true);
-//    }
-//    else if(lead == "Midnight"){
-//      stateSetter(100.0, 1.0, false);
-//    }
+
 
     return  SizedBox(
       height: 120.0,

@@ -25,95 +25,110 @@ class _EditorState extends State<Editor> {
       appBar: new AppBar(
         title: new Text("Edit Timings"),
       ),
-      body: new ListView(
+      body: new Stack(
         children : <Widget>[
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-
-              new Text("Timinng  " ,style: new TextStyle(color: Colors.blueAccent),),
-
-              DropdownButton<String>(
-                value: dropdownValue,
-                onChanged: (String newValue) {
-
-                  visibleButtons(newValue);
-
-                  setState(() {
-                    dropdownValue = newValue;
-                  });
-                },
-                items: timingList
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                })
-                    .toList(),
-              ),
-            ],
+          new Image.asset(
+            'images/city.jpg',
+            width: 1200.0,
+            height: 1200.0,
+            fit: BoxFit.cover,
           ),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Column(
             children: <Widget>[
-              DropdownButton<String>(
-                value: hoursVal,
-                onChanged: (String newValue) {
-                  setState(() {
-                    hoursVal = newValue;
-                  });
-                },
-                items:hoursList
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                })
-                    .toList(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+
+                    new Text("Timinng  " ,style: new TextStyle(color: Colors.blueAccent),),
+
+                    DropdownButton<String>(
+                      value: dropdownValue,
+                      onChanged: (String newValue) {
+
+                        visibleButtons(newValue);
+
+                        setState(() {
+                          dropdownValue = newValue;
+                        });
+                      },
+                      items: timingList
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value,style: new TextStyle(color: Colors.blueAccent)),
+                        );
+                      })
+                          .toList(),
+                    ),
+                  ],
+                ),
               ),
-              DropdownButton<String>(
-                value: minutesVal,
-                onChanged: (String newValue) {
-                  setState(() {
-                    minutesVal = newValue;
-                  });
-                },
-                items: minutesList
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                })
-                    .toList(),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  DropdownButton<String>(
+                    value: hoursVal,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        hoursVal = newValue;
+                      });
+                    },
+                    items:hoursList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value ,style: new TextStyle(color: Colors.blueAccent),),
+                      );
+                    })
+                        .toList(),
+                  ),
+                  DropdownButton<String>(
+                    value: minutesVal,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        minutesVal = newValue;
+                      });
+                    },
+                    items: minutesList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value,style: new TextStyle(color: Colors.blueAccent)),
+                      );
+                    })
+                        .toList(),
+                  ),
+
+                ],
+              ),
+
+              getOptionalWidget(opac),
+
+
+              new ListTile(
+
+                title: new FlatButton(
+                    color: Colors.blueAccent.shade100,
+                    splashColor: Colors.blueAccent,
+                    onPressed: (){
+
+                      Navigator.pop(context ,{
+                        'hour' : hoursVal,
+                        'hoursEndVal':hoursEndVal,
+                        'minuteEndVal':minuteEndVal ,
+                        'minute' : minutesVal,
+                        'timing':dropdownValue
+                      });
+                    },
+                    child: new Text("save data" , style: new TextStyle(color: Colors.white,fontSize: 15.0),)),
               ),
 
             ],
-          ),
-//
-
-          getOptionalWidget(opac),
-
-          new ListTile(
-
-            title: new FlatButton(
-                color: Colors.blueAccent.shade100,
-                splashColor: Colors.blueAccent,
-                onPressed: (){
-
-                  Navigator.pop(context ,{
-                    'hour' : hoursVal,
-                    'hoursEndVal':hoursEndVal,
-                    'minuteEndVal':minuteEndVal ,
-                    'minute' : minutesVal,
-                    'timing':dropdownValue
-                  });
-                },
-                child: new Text("save data" , style: new TextStyle(color: Colors.white,fontSize: 15.0),)),
           ),
         ],
       ),
@@ -139,7 +154,7 @@ class _EditorState extends State<Editor> {
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(value,style: new TextStyle(color: Colors.blueAccent)),
               );
             })
                 .toList(),
@@ -158,7 +173,7 @@ class _EditorState extends State<Editor> {
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(value,style: new TextStyle(color: Colors.blueAccent)),
               );
             })
                 .toList(),

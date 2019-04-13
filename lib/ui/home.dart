@@ -13,7 +13,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'search.dart';
 
-
+final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
 class Home extends StatefulWidget {
   @override
@@ -23,9 +23,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
 
-  var _connection = false , opac;
+  var _connection = true , opac;
   double percent , progress ;
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+
 
   @override
   void initState()  {
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
     );
     if (result!= null && result.containsKey('hour')){
 
-
+      if(_connection) {
         print(result['hour']);
         print(result['minute']);
         print(result['timing']);
@@ -106,8 +106,8 @@ class _HomeState extends State<Home> {
 
         String timing = result['timing'];
 
-        updateTimings(timing ,result);
-
+        updateTimings(timing, result);
+      }
     }
 
 

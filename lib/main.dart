@@ -10,6 +10,7 @@ void main(){
     runApp(
         new MaterialApp(
           title: title,
+          color: Colors.grey,
           home: new Home(),
         )
     );
