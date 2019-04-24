@@ -27,10 +27,14 @@ dependencies:
   firebase_core: ^0.2.5+1
   firebase_database: ^1.0.5
   firebase_messaging: 2.1.0
-  shared_preferences: ^0.5.1+2
+  shared_preferences: ^0.4.3
   http: ^0.12.0+1
-  connectivity: ^0.4.2
+  connectivity: ^0.3.2
   percent_indicator: ^1.0.14
+  flutter_local_notifications: ^0.4.0
+  audioplayers: ^0.10.1
+  fluttertoast: ^2.2.11
+  advanced_share: ^0.1.0
 
 dev_dependencies:
   flutter_test:
@@ -50,10 +54,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - images/white_snow.png
-   - images/no-wifi.png
-   - images/city.jpg
-   - images/time.jpg
+    - audio/
+    - images/
+
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

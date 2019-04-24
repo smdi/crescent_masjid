@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 void main(){
 
+  SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(

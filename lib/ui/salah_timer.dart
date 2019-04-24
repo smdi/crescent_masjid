@@ -4,6 +4,11 @@ import 'package:crescent_masjid/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity/connectivity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
+Map<dynamic , dynamic> content;
 
 
 
@@ -22,7 +27,6 @@ class Salah extends StatefulWidget {
 class _SalahState extends State<Salah> {
 
 
-
   var _connection = true , opac;
   double percent , progress ;
 
@@ -30,6 +34,11 @@ class _SalahState extends State<Salah> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    content = null;
+
+
+    print('init satate called');
 
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _refreshIndicator.currentState.show());
@@ -66,16 +75,21 @@ class _SalahState extends State<Salah> {
 
     String api = "http://api.aladhan.com/timingsByCity?city=$city&country=$country&method=8";
 
-    http.Response response = await http.get(api);
-
-
     stateSetter(50, 0.5, true);
-
     stateSetter(70, 0.7, true);
 
-    stateSetter(100, 1.0, false);
+    if(content == null){
 
-    return  json.decode(response.body);
+
+      http.Response response = await http.get(api);
+      content =   json.decode(response.body);
+      stateSetter(100, 1.0, false);
+      return content;
+    }else {
+      stateSetter(100, 1.0, false);
+      return content;
+    }
+
 
   }
 
@@ -83,14 +97,14 @@ class _SalahState extends State<Salah> {
 
 
     if(connectivity) {
-      stateSetter(100, 1.0, false);
+//      stateSetter(100, 1.0, false);
       return new FutureBuilder(
           future: getTimings(widget.city, widget.country),
           builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
             if (snapshot.hasData) {
               Map<dynamic , dynamic> content = snapshot.data;
-              print("inside snapshot");
-              print(content);
+//              print("inside snapshot");
+//              print(content);
 
               return new Column(
                 children: <Widget>[
@@ -210,7 +224,13 @@ class _SalahState extends State<Salah> {
       });
 //    return updateWidget();
 
-      stateSetter(40.0, 0.4, true);
+     if(content != null){
+       stateSetter(40.0, 0.4, false);
+     }
+     else {
+       stateSetter(40.0, 0.4, true);
+     }
+
 
     } else {
       // not  connected . show a image of network not connected .
@@ -235,6 +255,7 @@ class _SalahState extends State<Salah> {
   }
 
 }
+
 
 
 

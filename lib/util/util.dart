@@ -6,6 +6,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 final FirebaseDatabase database = FirebaseDatabase.instance;
 
@@ -15,6 +17,13 @@ final FirebaseMessaging messaging =  FirebaseMessaging();
 
 String  sehari ,fajr , zohar , asar ,iftiyaari, magrib , isha  , sub = "subscribed";
 
+final String password1 = "Khalid";
+final String password2 = "khalid";
+final String password3 = "KHALID";
+
+AudioCache  audioCache = new AudioCache();
+
+const notificationAudioPath = "audio/chime.mp3";
 
 Widget getProgressCircle(double progress, double percent, bool opac ) {
 
@@ -28,12 +37,12 @@ Widget getProgressCircle(double progress, double percent, bool opac ) {
       center: new Text(
         "$percent %",
         style:
-        new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        new TextStyle(color:Colors.blueAccent.shade100,fontWeight: FontWeight.bold, fontSize: 20.0),
       ),
       footer: new Text(
-        "Fetching data !!",
+        "Fetching data ... ",
         style:
-        new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+        new TextStyle(color:Colors.blueAccent.shade100,fontWeight: FontWeight.bold, fontSize: 17.0),
       ),
       circularStrokeCap: CircularStrokeCap.round,
       progressColor: Colors.lightBlue,
@@ -42,11 +51,12 @@ Widget getProgressCircle(double progress, double percent, bool opac ) {
 }
 
 String title =  "Crescent Masjid";
+String title1 =  "Crescent Masjid";
 
 List<String> hoursList =  <String>['01','02','03','04','05','06','07','08','09','10','11','12'];
 
 List<String> timingList =  <String>['sehari','fajr','sunrise',
-                                     'zohar',
+                                     'zohar','jumah' ,
                                     'asar','iftiyaari','sunset',
                                     'magrib',
                                     'isha', 'taraweeh'];
@@ -89,10 +99,16 @@ Widget getNoConnectionWidget(){
 
 }
 
+void setStoreCityCon() async {
+
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  preferences.setString('city', 'Hyderabad');
+  preferences.setString('country', 'India');
+
+}
 
 
-
-
+String app_name  = "Crescent Masjid";
 
 
 
