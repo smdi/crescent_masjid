@@ -1,5 +1,4 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:crescent_masjid/ui/school.dart';
 import 'package:crescent_masjid/util/util.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +15,17 @@ int flag = 0;
 
 Map<dynamic, dynamic> content;
 
-DatabaseReference _databaseReference;
+DatabaseReference _dbReference ;
 
 final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<
     RefreshIndicatorState>();
 
-class Home extends StatefulWidget {
+class School extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _SchoolState createState() => _SchoolState();
 }
 
-class _HomeState extends State<Home> {
+class _SchoolState extends State<School> {
 
 
   final TextEditingController _passwordController = new TextEditingController();
@@ -34,21 +33,22 @@ class _HomeState extends State<Home> {
 
   AudioPlayer audioPlayer = new AudioPlayer();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  var _connection = true,opac;
+  var _connection = true,
+      opac;
   double percent, progress;
 
 
   @override
   void initState()
   {
-  // TODO: implement initState
-  super.initState();
+    // TODO: implement initState
+    super.initState();
 
 
-  WidgetsBinding.instance
-      .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show ());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show ());
 
-  stateSetter(20.0, 0.2, true);
+    stateSetter(20.0, 0.2, true);
 
   }
 
@@ -59,38 +59,17 @@ class _HomeState extends State<Home> {
 
         appBar: new AppBar(
           backgroundColor: Colors.lightBlue,
-          title: new Text(title_hostel),
+          title: new Text(title_school),
           actions: <Widget>[
 
-
-            IconButton(
-              icon: Icon(Icons.message),
-              tooltip: 'message',
-              onPressed: () {
-                sendMessage();
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.search),
-              tooltip: 'search',
-              onPressed: () {
-                _gotoSearch(context);
-              },
-            ),
             IconButton(
               icon: Icon(Icons.edit),
               tooltip: 'edit',
-              onPressed: () {
-                  _showDialog();
+              onPressed: () {//
+                _showDialog();
               },
             ),
-            IconButton(
-              icon: Icon(Icons.share),
-              tooltip: 'edit',
-              onPressed: () {
-                _share();
-              },
-            ),
+
 
           ],
 
@@ -108,32 +87,11 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
-      floatingActionButton: new FloatingActionButton.extended(
-          backgroundColor: Colors.blueAccent.shade400,
-          onPressed: ()=> { _gotoSchool(context)} ,
-          icon: Icon(Icons.school ),
-          label: new Text("school"),
-        ),
+
     );
   }
 
-  Future _gotoSearch(BuildContext context) async {
-    Navigator.of(context).push(
-        new MaterialPageRoute<Map>(
-            builder: (BuildContext context) {
-              return new Search();
-            })
-    );
-  }
 
-  Future _gotoSchool(BuildContext context) async {
-    Navigator.of(context).push(
-        new MaterialPageRoute<Map>(
-            builder: (BuildContext context) {
-              return new School();
-            })
-    );
-  }
 
   Future _gotoEditor(BuildContext context) async {
     Map result = await Navigator.of(context).push(
@@ -165,10 +123,11 @@ class _HomeState extends State<Home> {
     stateSetter(70.0, 0.7, true);
 
 
-    _databaseReference = database.reference().child("timings");
+    _dbReference = database.reference().child("school");
+
     stateSetter(80.0, 0.8, false);
     if (flag == 0) {
-      await _databaseReference.once().then((DataSnapshot snapshot) {
+      await _dbReference.once().then((DataSnapshot snapshot) {
         data = snapshot.value;
         flag = 1;
         content = data;
@@ -244,15 +203,15 @@ class _HomeState extends State<Home> {
     String date = getDate();
     print("Date");
     print(date);
-    _databaseReference.update({'$timing': '$hour'});
-    _databaseReference.update({'updated': '$date'});
+    _dbReference.update({'$timing': '$hour'});
+    _dbReference.update({'updated': '$date'});
   }
 
   void setTwoValues(String timing, String hour, String hourLast) {
     String date = getDate();
-    _databaseReference.update({'$timing': '$hour'});
-    _databaseReference.update({'$timing' + '_iqamah': '$hourLast'});
-    _databaseReference.update({'updated': '$date'});
+    _dbReference.update({'$timing': '$hour'});
+    _dbReference.update({'$timing' + '_iqamah': '$hourLast'});
+    _dbReference.update({'updated': '$date'});
   }
 
   void firebaseListener() {
@@ -325,7 +284,7 @@ class _HomeState extends State<Home> {
 
       _loadData();
       firebaseListener();
-      _databaseReference = database.reference().child("timings");
+      _dbReference = database.reference().child("school");
       print("connected to network");
 
 
@@ -545,7 +504,7 @@ class _HomeState extends State<Home> {
 
       setOneValues(timing, hour);
       updateUsers(
-          "https://crescent-masjid-timings.herokuapp.com/notify?head=Hostel Masjid $timing timings has updated&contain=$timing - $hour");
+          "https://crescent-masjid-timings.herokuapp.com/notify?head=School Masjid $timing timings has updated&contain=$timing - $hour");
     }
     else {
       String timing = result['timing'];
@@ -629,12 +588,12 @@ class _HomeState extends State<Home> {
                 child: new Text("Ok"),
                 onPressed: () {
 
-                  if(_passwordController.text.toString().toLowerCase() == password_hostel ){
+                  if(_passwordController.text.toString().toLowerCase() == password_school ){
 
-                      _passwordController.text = "";
-                      getToast(Colors.blueAccent.shade400 ,"       Edit Timings       ");
-                      Navigator.of(context).pop();
-                      _gotoEditor(context);
+                    _passwordController.text = "";
+                    getToast(Colors.blueAccent.shade400 ,"       Edit Timings       ");
+                    Navigator.of(context).pop();
+                    _gotoEditor(context);
                   }
                   else {
                     //show snackbar message that auth failed
@@ -649,19 +608,19 @@ class _HomeState extends State<Home> {
 
             ],
           );
-    });
+        });
 
   }
 
   void getToast(Color shade700, String s) {
     Fluttertoast.showToast(
-        msg: s,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        backgroundColor: shade700,
-        textColor: Colors.white,
-        fontSize: 16.0,
+      msg: s,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIos: 1,
+      backgroundColor: shade700,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 
@@ -717,7 +676,7 @@ class _HomeState extends State<Home> {
 
                     //send message to users
                     updateUsers(
-                        "https://crescent-masjid-timings.herokuapp.com/notify?head=crescent masjid"
+                        "https://crescent-masjid-timings.herokuapp.com/notify?head=school masjid"
                             "&contain=${body}");
                     getToast(Colors.blueAccent.shade400 ,"       Sending message       ");
                     _bodyController.text = "";
@@ -741,14 +700,7 @@ class _HomeState extends State<Home> {
         });
   }
 
-  void _share() {
-    AdvancedShare.generic(
-      msg: "$app_name \n\n https://play.google.com/store/apps/details?id=com.zulfiqar.crescent_masjid&hl=en",
-      title: "$app_name link",
-    ).then((response){
-      print(response);
-    });
-  }
+
 
 }
 

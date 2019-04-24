@@ -11,15 +11,16 @@ import 'package:audioplayers/audio_cache.dart';
 
 final FirebaseDatabase database = FirebaseDatabase.instance;
 
-DatabaseReference dbReference;
+
 
 final FirebaseMessaging messaging =  FirebaseMessaging();
 
 String  sehari ,fajr , zohar , asar ,iftiyaari, magrib , isha  , sub = "subscribed";
 
-final String password1 = "Khalid";
-final String password2 = "khalid";
-final String password3 = "KHALID";
+
+final String password_hostel = "khalid";
+final String password_school = "crescent";
+
 
 AudioCache  audioCache = new AudioCache();
 
@@ -50,8 +51,8 @@ Widget getProgressCircle(double progress, double percent, bool opac ) {
   );
 }
 
-String title =  "Crescent Masjid";
-String title1 =  "Crescent Masjid";
+String title_hostel =  "Hostel Masjid";
+String title_school =  "School Masjid";
 
 List<String> hoursList =  <String>['01','02','03','04','05','06','07','08','09','10','11','12'];
 
